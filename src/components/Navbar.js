@@ -1,16 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link,NavLink } from 'react-router-dom'
 import Logo from "../assets/Logo.png"
 
 const Navbar = () => {
   return (
-    <div className='h-20 bg-[#002080] z-50 w-full px-20 fixed top-0 flex items-center justify-between'>
+    <div className='h-16 bg-[#002080] z-50 w-full px-20 fixed top-0 flex items-center justify-between'>
         <Link to="/">
             <div className='flex items-center justify-centeer gap-x-3'>
-                    <img src={Logo} alt="logo" className='w-16 h-16 object-cover'/>
+                    <img src={Logo} alt="logo" className='w-14 h-14 object-cover'/>
                     <span>
-                        <h1 className='text-white uppercase font-semibold'>Hofan Training</h1>
-                        <h1 className='text-white uppercase font-semibold'>Institute</h1>
+                        <h1 className='text-white uppercase font-semibold'>Hofan Training Instute</h1>
+                        <h1 className='text-white font-semibold'>Online Application System</h1>
                     </span>
             </div>
         </Link>
@@ -18,31 +18,31 @@ const Navbar = () => {
             <div>
                 <ul className='text-white uppercase flex items-center gap-x-5'>
                     <li className='duration-200 hover:border-b my-2 hover:border-white cursor-pointer'>
-                        <Link to="/about">
-                            About
-                        </Link>
+                        <NavLink to="/">
+                            Home
+                        </NavLink>
                     </li>
                     <li className='duration-200 hover:border-b my-2 hover:border-white cursor-pointer'>
-                        <Link to="/certificate">
+                        <NavLink to="/certificate">
                             Certificate
-                        </Link>
+                        </NavLink>
                     </li>
                     <li className='duration-200 hover:border-b my-2 hover:border-white cursor-pointer'>
-                        <Link to="/diploma">
+                        <NavLink to="/diploma">
                             Diploma
-                        </Link>
+                        </NavLink>
                     </li>
                     <li className='duration-200 hover:border-b my-2 hover:border-white cursor-pointer'>
-                        <Link to="/application-me">
-                            My Application 
-                        </Link>
+                        <NavLink to="/application-me">
+                            Selected 
+                        </NavLink>
                     </li>
                 </ul>
             </div>
             <div>
                 <Link to="/user/sign-up">
                     <button className='uppercase text-white bg-orange-500 px-4 py-2'>
-                        Apply now
+                        Login
                     </button>
                 </Link>
             </div>

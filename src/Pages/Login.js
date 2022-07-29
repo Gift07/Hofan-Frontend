@@ -1,11 +1,36 @@
-import React from 'react'
+import {useState} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
+import { Navigate } from 'react-router-dom'
+import { SignInAction } from '../features/auth/action'
+import {TailSpin} from "react-loader-spinner"
+
 import Navbar from '../components/Navbar'
-import Logo from "../assets/Logo.png"
 import { AiOutlineCopyright } from 'react-icons/ai'
+import Logo from "../assets/Logo.png"
 
 const Login = () => {
+  const [formData, setFormData] = useState({
+    email:"",
+    password:""
+  })
+  const dispatch = useDispatch()
+  const {access, authLoading, authError} =useSelector(state => state.Auth)
+
+  const handleChange = (event)=>{
+    setFormData({
+      ...formData, [event.target.name]: event.target.value
+    })
+  }
+
+  const handleSubmit = (event)=>{
+    event.preventDefault()
+    dispatch(SignInAction(formData))
+  }
+
+  if(access) return <Navigate to="/"/>
+
   return (
-    <div className='w-full font-poppins'>
+    <div className='w-full font-poppins bg-blue-100'>
       <Navbar/>
       <div className='pt-20 px-20'>
         <div className='mt-16'>
@@ -26,7 +51,11 @@ const Login = () => {
                 Enter Email
               </label>
               <input
-              placeholder='Email' 
+              placeholder='Email'
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={(event)=> handleChange(event)} 
               className='h-10 w-72 p-2 border border-blue-700 outline-none'/>
             </div>
             <div className='my-8'>
@@ -35,16 +64,28 @@ const Login = () => {
               </label>
               <input
               placeholder='Password'
-              type="password" 
+              type="password"
+              name='password'
+              value={formData.password}
+              onChange={(event =>handleChange(event))} 
               className='h-10 w-72 p-2 border border-blue-700 outline-none'/>
             </div>
             <span className='my-3'>
               <h1 className='pb-3'>Forgot your password?</h1>
             </span>
             <div>
-              <button className='px-6 py-2 bg-blue-600 text-600 duration-200 hover:bg-blue-700 text-white'>
-                Submit
+              {authLoading ? (
+                  <button className='px-6 py-2 flex items-center gap-x-3 bg-blue-600 text-600 duration-200 hover:bg-blue-700 text-white'>
+                      <TailSpin color="#FFF" height={17} width={17} />
+                <h1>Loading...</h1>
+                </button>
+              ): (
+                <button 
+                onClick={(event) => handleSubmit(event)}
+                className='px-6 py-2 bg-blue-600 text-600 duration-200 hover:bg-blue-700 text-white'>
+                  Submit
               </button>
+              )}
             </div>
           </form>
         </div>

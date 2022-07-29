@@ -40,7 +40,7 @@ const Navbar = () => {
                 </ul>
             </div>
             <div>
-                <Link to="/user/sign-up">
+                <Link to="/user/sign-in">
                     <button className='uppercase text-white bg-orange-500 px-4 py-2'>
                         Login
                     </button>

@@ -9,7 +9,7 @@ const useAxiosPrivate = () => {
     useEffect(()=>{
         const requestInterceptor = axiosPrivate.interceptors.request.use(
             config => {
-                console.log(config)
+
                 if (typeof config.headers === "undefined"){
                     return Promise.reject("undefined")
                 }
@@ -24,7 +24,7 @@ const useAxiosPrivate = () => {
             response => response,
             async(error) =>{
                 const prevRequest = error?.config;
-                console.log(error)
+
                 if(error?.message === "Request failed with status code 401"&& !prevRequest?.sent){
                     prevRequest.sent = true
                     const access = await refresh()

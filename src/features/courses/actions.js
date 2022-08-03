@@ -1,21 +1,28 @@
-import {createAsyncThunk} from "@reduxjs/toolkit"
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "../../axios";
 
-export const FetchCourseCertificate = createAsyncThunk("Courses/Fetch", async({axiosPrivate})=>{
+export const FetchCourseCertificate = createAsyncThunk(
+  "Courses/Fetch",
+  async () => {
     try {
-        const {data}  = await axiosPrivate.get("/courses/certificate/")
+      const { data } = await axios.get("/courses/certificate/");
 
-        return data
+      return data;
     } catch (error) {
-        return error
+      return error;
     }
-})
+  }
+);
 
-export const FetchCoursesDiploma = createAsyncThunk("Courses/Fetch", async({axiosPrivate})=>{
+export const FetchCoursesDiploma = createAsyncThunk(
+  "Courses/Fetch",
+  async () => {
     try {
-        const {data}  = await axiosPrivate.get("/courses/diploma/")
+      const { data } = await axios.get("/courses/diploma/");
 
-        return data
+      return data;
     } catch (error) {
-        return error
+      return error;
     }
-})
+  }
+);

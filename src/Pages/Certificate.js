@@ -1,19 +1,20 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FetchCourseCertificate } from "../features/courses/actions";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Navbar from "../components/Navbar";
+import { TailSpin } from "react-loader-spinner";
 
 const Certificate = () => {
   const dispatch = useDispatch();
-  const axiosPrivate = useAxiosPrivate();
+
   const { certificateLoading, courseCertificate, courseError } = useSelector(
     (state) => state.Certificate
   );
 
   useEffect(() => {
-    dispatch(FetchCourseCertificate({ axiosPrivate }));
-  }, [dispatch, axiosPrivate]);
+    dispatch(FetchCourseCertificate());
+  }, [dispatch]);
+
   return (
     <div className="font-poppins bg-blue-100 min-h-screen">
       <Navbar />
@@ -38,8 +39,23 @@ const Certificate = () => {
               Apply Now
             </button>
           </span>
-          <div className="flex">
-            <span className="grid grid-cols-3"></span>
+          <div className="flex items-center justify-center my-4">
+            <span className="grid grid-cols-3 items-center justify-center gap-x-8">
+              {certificateLoading ? (
+                <div className="w-screen ">
+                  <TailSpin height={40} width={40} color="blue" />
+                </div>
+              ) : courseError ? (
+                <div>
+                  <h1>Something went wrong</h1>
+                </div>
+              ) : (
+                courseCertificate &&
+                courseCertificate.map((item) => (
+                  <h1 key={item.id}>{item.course_title}</h1>
+                ))
+              )}
+            </span>
           </div>
         </div>
       </div>

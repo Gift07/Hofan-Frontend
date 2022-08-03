@@ -11,6 +11,8 @@ import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import Status from "./Pages/Status";
+import Thankyou from "./Pages/Thankyou";
+import Verify from "./Pages/Verify";
 
 function App() {
   const dispatch = useDispatch();
@@ -30,6 +32,8 @@ function App() {
         <Route path="about" element={<About />} />
         <Route path="diploma" element={<Diploma />} />
         <Route path="certificate" element={<Certificate />} />
+        <Route path="complete-registlation" element={<Thankyou />} />
+        <Route path="activate/:uid/:token" element={<Verify />} />
       </Routes>
     </BrowserRouter>
   );

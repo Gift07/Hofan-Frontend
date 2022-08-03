@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FetchCoursesDiploma } from "../features/courses/actions";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Navbar from "../components/Navbar";
+import { TailSpin } from "react-loader-spinner";
 
 const Diploma = () => {
   const dispatch = useDispatch();
@@ -38,8 +39,23 @@ const Diploma = () => {
               Apply Now
             </button>
           </span>
-          <div className="flex">
-            <span className="grid grid-cols-3"></span>
+          <div className="flex items-center justify-center my-4">
+            <span className="grid grid-cols-3 items-center justify-center gap-x-8">
+              {diplomaLoading ? (
+                <div className="w-screen ">
+                  <TailSpin height={40} width={40} color="blue" />
+                </div>
+              ) : diplomaError ? (
+                <div>
+                  <h1>Something went wrong</h1>
+                </div>
+              ) : (
+                courseDiploma &&
+                courseDiploma.map((item) => (
+                  <h1 key={item.id}>{item.course_title}</h1>
+                ))
+              )}
+            </span>
           </div>
         </div>
       </div>

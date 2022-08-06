@@ -5,7 +5,15 @@ const initialState = {
   school_name: "",
   division: "",
   point: "",
-  results: [],
+  results: {
+    Mathematics: "",
+    Biology: "",
+    History: "",
+    Civics: "",
+    English: "",
+    Kiswahili: "",
+    Geography: "",
+  },
   resultsLoading: false,
   resultsError: null,
 };
@@ -24,6 +32,13 @@ const resultsSlice = createSlice({
         state.school_name = action.payload.school_name;
         state.division = action.payload.division;
         state.point = action.payload.points;
+        state.results.Mathematics = action.payload.subjects.CIV;
+        state.results.Biology = action.payload.subjects.BIO;
+        state.results.Civics = action.payload.subjects.CIV;
+        state.results.History = action.payload.subjects.HIST;
+        state.results.Kiswahili = action.payload.subjects.KISW;
+        state.results.English = action.payload.subjects.ENGL;
+        state.results.Geography = action.payload.subjects.GEO;
       })
       .addCase(FetchResults.rejected, (state, action) => {
         state.resultsError = action.payload;

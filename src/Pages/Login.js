@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { SignInAction } from "../features/auth/action";
 import { TailSpin } from "react-loader-spinner";
 
@@ -73,6 +73,9 @@ const Login = () => {
             </div>
             <span className="my-3">
               <h1 className="pb-3">Forgot your password?</h1>
+              <Link to="/user/sign-up">
+                <h1 className="pb-3">You dont have an account? Register</h1>
+              </Link>
             </span>
             <div>
               {authLoading ? (

@@ -29,7 +29,7 @@ function App() {
         <Route path="/user/sign-in" element={<Login />} />
         <Route path="user/sign-up" element={<Register />} />
         <Route path="user-profile" element={<Status />} />
-        <Route path="about" element={<About />} />
+        <Route path="application-results" element={<About />} />
         <Route path="diploma" element={<Diploma />} />
         <Route path="certificate" element={<Certificate />} />
         <Route path="complete-registlation" element={<Thankyou />} />

@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import Navbar from "../components/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { FetchProfile } from "../features/profile/actions";
+import { AppliedState, FetchProfile } from "../features/profile/actions";
 import Loading from "../components/Loading";
 import Footer from "../components/Footer";
 import Info from "../components/Info";
@@ -11,30 +11,29 @@ import {
   FetchCoursesDiploma,
 } from "../features/courses/actions";
 import { FetchResults } from "../features/results/action";
-import { TailSpin } from "react-loader-spinner";
 import Profile from "./Profile";
+import { regions, disabiledStatus } from "../components/regions";
+import { ApplyCourseAction } from "../features/myapplication/action";
+import Applied from "./Applied";
 
 const Status = () => {
   const [educationLevel, setEducationLevel] = useState("");
-  const [year, setYear] = useState(0);
-  const [body, setBody] = useState({
-    year: "",
-    exam_type: "csee",
-    school_number: "",
-    students_number: "",
-  });
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const [errorItem, setError] = useState("");
+  const [disability, setDisability] = useState("");
+  const [region, setRegion] = useState("");
+  const [has_olevo_certificate, setHasolevo] = useState(true);
 
   const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
   const { profile, profileLoading, profileError } = useSelector(
     (state) => state.Profile
   );
-  const { certificateLoading, certificate, certificateError } = useSelector(
-    (state) => state.Certificate
+  const { school_name, division, point, results } = useSelector(
+    (state) => state.Results
   );
-  const { diplomaLoading, diploma, diplomaError } = useSelector(
-    (state) => state.Diploma
-  );
+  const { courseCertificate } = useSelector((state) => state.Certificate);
+  const { courseDiploma } = useSelector((state) => state.Diploma);
   const {
     first_name,
     middle_name,
@@ -50,29 +49,69 @@ const Status = () => {
 
   const Education = ["Certificate", "Diploma"];
 
-  const Qualifications = ["olevo"];
-  const handleChange = (event) => {
-    setBody({ ...body, [event.target.name]: event.target.value });
-  };
+  const findResults = useCallback(
+    (value) => {
+      if (typeof value !== "undefined") {
+        const dataItem = value.split("/");
+        setHasolevo(true);
 
-  const bodyData = {
-    year: "2015",
-    exam_type: "csee",
-    school_number: "s3470",
-    student_number: "0040",
+        const bodyInit = {
+          year: dataItem[2],
+          exam_type: "csee",
+          school_number: dataItem[0],
+          student_number: dataItem[1],
+        };
+        return bodyInit;
+      } else {
+        setError("You did not provide a form four number ");
+        setHasolevo(false);
+        return errorItem;
+      }
+    },
+    [errorItem]
+  );
+
+  const bodyData = useMemo(
+    () => findResults(form_four_number),
+    [findResults, form_four_number]
+  );
+
+  const handleClick = () => {
+    const formData = {
+      disability,
+      region_of_residence: region,
+      selected_course: selectedCourse,
+      education: educationLevel,
+      has_olevo_certificate: has_olevo_certificate,
+      form_four_Number: form_four_number,
+      division,
+      point,
+      results: {
+        Mathematics: results.Mathematics,
+        Biology: results.Biology,
+        Geography: results.Geography,
+        English: results.English,
+        Kiswahili: results.Kiswahili,
+        History: results.History,
+        Civics: results.Civics,
+      },
+    };
+    const username = profile.email;
+    // dispatch(ApplyCourseAction({ formData, axiosPrivate }));
+    dispatch(AppliedState({ axiosPrivate, username }));
   };
   useEffect(() => {
     dispatch(FetchProfile({ axiosPrivate }));
     dispatch(FetchCourseCertificate({ axiosPrivate }));
     dispatch(FetchCoursesDiploma({ axiosPrivate }));
     dispatch(FetchResults({ bodyData, axiosPrivate }));
-  }, [dispatch, axiosPrivate]);
+  }, [dispatch, axiosPrivate, bodyData]);
 
   return (
     <div className="w-screen relative min-h-screen font-poppins bg-blue-100">
       {status === "Init" ? (
         <Profile />
-      ) : (
+      ) : status === "Pending" ? (
         <React.Fragment>
           {profileLoading ? (
             <Loading />
@@ -118,16 +157,69 @@ const Status = () => {
                     <button className="px-4 py-2 bg-blue-600 text-white">
                       Edit information
                     </button>
+                    {/* your results */}
                     <div className="mt-5">
+                      <span>
+                        <h1 className="uppercase font-semibold">
+                          Your Results
+                        </h1>
+                      </span>
+                      <span className="flex items-center gap-x-2">
+                        <h1>School: </h1>
+                        <h1 className="font-semibold">{school_name}</h1>
+                      </span>
+                      <span className="flex items-center gap-x-2">
+                        <h1>Division: </h1>
+                        <h1 className="font-semibold">{division}</h1>
+                      </span>
+                      <span className="flex items-center gap-x-2">
+                        <h1>Point: </h1>
+                        <h1 className="font-semibold">{point}</h1>
+                      </span>
+                      <div className="bg-blue-200 px-5 py-2 my-3  rounded-md">
+                        <div>
+                          <span className="flex items-center">
+                            <h1>Mathematics : </h1>
+                            <h1>{results.Mathematics}</h1>
+                          </span>
+                          <span className="flex items-center">
+                            <h1>Civics : </h1>
+                            <h1>{results.Civics}</h1>
+                          </span>
+                          <span className="flex items-center">
+                            <h1>History : </h1>
+                            <h1>{results.History}</h1>
+                          </span>
+                          <span className="flex items-center">
+                            <h1>English : </h1>
+                            <h1>{results.English}</h1>
+                          </span>
+                        </div>
+                        <span className="flex items-center">
+                          <h1>Kiswahili : </h1>
+                          <h1>{results.Kiswahili}</h1>
+                        </span>
+                        <span className="flex items-center">
+                          <h1>Geography : </h1>
+                          <h1>{results.Geography}</h1>
+                        </span>
+                        <span className="flex items-center">
+                          <h1>Biology : </h1>
+                          <h1>{results.Biology}</h1>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="mt-5 w-full items-center justify-between">
                       <div>
                         <h1 className="uppercase font-semibold">
                           Your application
                         </h1>
                       </div>
-                      <div className="my-4 flex items-center">
+                      <div className="my-4 flex items-center w-full gap-x-16">
                         <span className="gap-x-4">
                           <label className="mr-4">Education Level</label>
                           <select
+                            required={true}
                             onChange={(event) =>
                               setEducationLevel(event.target.value)
                             }
@@ -141,30 +233,44 @@ const Status = () => {
                             ))}
                           </select>
                         </span>
-                        <span className="gap-x-4">
-                          <label className="mr-4">Education Level</label>
-                          <select
-                            onChange={(event) =>
-                              setEducationLevel(event.target.value)
-                            }
-                            className="p-2 h-10 border border-blue-600 outline-none"
-                          >
-                            <option>Select The Entry Qualifications</option>
-                            {Qualifications.map((item, index) => (
-                              <option key={index} value={item}>
-                                {item}
-                              </option>
-                            ))}
-                          </select>
-                        </span>
-                        <div>
-                          <label>Csee seat Count</label>
-                          <input
-                            defaultValue={1}
-                            type="number"
-                            className="p-2 h-10 border border-blue-600 outline-none"
-                          />
-                        </div>
+                        {educationLevel === "Certificate" ? (
+                          <span className="gap-x-4">
+                            <label className="mr-4">Select course</label>
+                            <select
+                              onChange={(event) =>
+                                setSelectedCourse(event.target.value)
+                              }
+                              className="p-2 h-10 border border-blue-600 outline-none"
+                            >
+                              <option>Select The Entry Qualifications</option>
+                              {courseCertificate.map((item, index) => (
+                                <option key={item.id} value={item.course_title}>
+                                  {item.course_title}
+                                </option>
+                              ))}
+                            </select>
+                          </span>
+                        ) : educationLevel === "Diploma" ? (
+                          <span className="gap-x-4">
+                            <label className="mr-4">The course You apply</label>
+                            <select
+                              onChange={(event) =>
+                                setSelectedCourse(event.target.value)
+                              }
+                              className="p-2 h-10 border border-blue-600 outline-none"
+                            >
+                              <option>Select The Entry Qualifications</option>
+                              {courseDiploma.map((item) => (
+                                <option key={item.id} value={item.course_title}>
+                                  {item.course_title}
+                                </option>
+                              ))}
+                            </select>
+                          </span>
+                        ) : (
+                          <div />
+                        )}
+                        <div />
                       </div>
                     </div>
                     {/* Entry qualifications
@@ -226,17 +332,16 @@ const Status = () => {
                       <span className="uppercase font-semibold">
                         <h1>Your Residence</h1>
                       </span>
-                      <div className="my-4 flex items-center">
+                      <div className="my-4 flex items-center ">
                         <span className="gap-x-4">
-                          <label className="mr-4">Education Level</label>
+                          <label className="mr-4">Region</label>
                           <select
-                            onChange={(event) =>
-                              setEducationLevel(event.target.value)
-                            }
+                            required={true}
+                            onChange={(event) => setRegion(event.target.value)}
                             className="p-2 h-10 border border-blue-600 outline-none"
                           >
-                            <option>Select The Education Level</option>
-                            {Education.map((item, index) => (
+                            <option>Select Area of Residence</option>
+                            {regions.map((item, index) => (
                               <option key={index} value={item}>
                                 {item}
                               </option>
@@ -244,34 +349,38 @@ const Status = () => {
                           </select>
                         </span>
                         <span className="gap-x-4">
-                          <label className="mr-4">Education Level</label>
+                          <label className="mr-4">Diasability</label>
                           <select
+                            required={true}
                             onChange={(event) =>
-                              setEducationLevel(event.target.value)
+                              setDisability(event.target.value)
                             }
                             className="p-2 h-10 border border-blue-600 outline-none"
                           >
-                            <option>Select The Entry Qualifications</option>
-                            {Qualifications.map((item, index) => (
+                            <option>Any disability</option>
+                            {disabiledStatus.map((item, index) => (
                               <option key={index} value={item}>
                                 {item}
                               </option>
                             ))}
                           </select>
                         </span>
-                        <div>
+                        {/* <div>
                           <label>Csee seat Count</label>
                           <input
                             defaultValue={1}
                             type="number"
                             className="p-2 h-10 border border-blue-600 outline-none"
                           />
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                     <div className="flex items-center justify-end px-10">
-                      <button className="px-8 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 my-3 text-white">
-                        Next
+                      <button
+                        onClick={handleClick}
+                        className="px-8 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 my-3 text-white"
+                      >
+                        Submit Your Application
                       </button>
                     </div>
                   </div>
@@ -281,6 +390,8 @@ const Status = () => {
             </div>
           )}
         </React.Fragment>
+      ) : (
+        <Applied />
       )}
     </div>
   );

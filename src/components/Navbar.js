@@ -34,7 +34,7 @@ const Navbar = () => {
               <NavLink to="/diploma">Diploma</NavLink>
             </li>
             <li className="duration-200 hover:border-b my-2 hover:border-white cursor-pointer">
-              <NavLink to="/application-me">Selected</NavLink>
+              <NavLink to="/application-results">Selected</NavLink>
             </li>
           </ul>
         </div>

@@ -6,6 +6,7 @@ import Logo from "../assets/Logo.png";
 import { AiOutlineCopyright } from "react-icons/ai";
 import { TailSpin } from "react-loader-spinner";
 import { SignUpAction } from "../features/auth/action";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -148,19 +149,24 @@ const Register = () => {
             </div>
             <div />
             <div>
-              {authLoading ? (
-                <button className="flex items-center gap-x-2 px-6 py-2 bg-blue-600 text-white">
-                  <TailSpin width={20} height={20} color="#fff" />
-                  Loading....
-                </button>
-              ) : (
-                <button
-                  type="submit"
-                  className="px-6 py-2 bg-blue-600 text-600 duration-200 hover:bg-blue-700 text-white"
-                >
-                  Submit
-                </button>
-              )}
+              <Link to="/user/sign-up">
+                <h1 className="pb-3">You dont have an account? Register</h1>
+              </Link>
+              <div>
+                {authLoading ? (
+                  <button className="flex items-center gap-x-2 px-6 py-2 bg-blue-600 text-white">
+                    <TailSpin width={20} height={20} color="#fff" />
+                    Loading....
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-blue-600 text-600 duration-200 hover:bg-blue-700 text-white"
+                  >
+                    Submit
+                  </button>
+                )}
+              </div>
             </div>
           </form>
         </div>

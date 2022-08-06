@@ -62,3 +62,11 @@ export const verifyUserAction = createAsyncThunk(
     }
   }
 );
+
+export const signOutAction = () => {
+  try {
+    localStorage.clear();
+  } catch (error) {
+    return error;
+  }
+};

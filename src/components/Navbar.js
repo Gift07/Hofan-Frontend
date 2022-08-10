@@ -4,7 +4,9 @@ import Logo from "../assets/Logo.png";
 import User from "../assets/th.jpeg";
 
 const Navbar = () => {
-  const { firstName, surName, email } = useSelector((state) => state.Auth);
+  const { firstName, surName, email, admin } = useSelector(
+    (state) => state.Auth
+  );
 
   return (
     <div className="h-16 bg-[#002080] z-50 w-full px-20 fixed top-0 flex items-center justify-between">
@@ -34,13 +36,17 @@ const Navbar = () => {
               <NavLink to="/diploma">Diploma</NavLink>
             </li>
             <li className="duration-200 hover:border-b my-2 hover:border-white cursor-pointer">
-              <NavLink to="/application-results">Selected</NavLink>
+              {admin ? (
+                <Link to="admin/dashboard">Dashboard</Link>
+              ) : (
+                <NavLink to="/application-results">Selected</NavLink>
+              )}
             </li>
           </ul>
         </div>
-        <div>
-          {email ? (
-            <Link to="/user-profile">
+        {admin ? (
+          <div>
+            <Link to="/admin/dashboardss">
               <div className="h-full flex items-center gap-x-3">
                 <img
                   src={User}
@@ -55,14 +61,34 @@ const Navbar = () => {
                 </span>
               </div>
             </Link>
-          ) : (
-            <Link to="/user/sign-in">
-              <button className="uppercase text-white bg-orange-500 px-4 py-2">
-                Login
-              </button>
-            </Link>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div>
+            {email ? (
+              <Link to="/user-profile">
+                <div className="h-full flex items-center gap-x-3">
+                  <img
+                    src={User}
+                    alt="user"
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <span className="text-sm text-white">
+                    <h1>
+                      {firstName} {surName}
+                    </h1>
+                    <h1 className="text-xs">{email}</h1>
+                  </span>
+                </div>
+              </Link>
+            ) : (
+              <Link to="/user/sign-in">
+                <button className="uppercase text-white bg-orange-500 px-4 py-2">
+                  Login
+                </button>
+              </Link>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

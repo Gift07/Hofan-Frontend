@@ -14,12 +14,12 @@ const Welcome = () => {
         <div className="my-3">
           <span className="flex items-center bg-blue-200">
             <hr className="w-2 h-10 border border-blue-600 bg-blue-600" />
-            <h1 className="text-gray-900 ml-5 flex items-center gap-x-3">
+            <span className="text-gray-900 ml-5 flex items-center gap-x-3">
               <h1 className="text-gray-500 text-lg">
                 <BsCreditCard />
               </h1>
               Application window for 2022/2023 is now open
-            </h1>
+            </span>
           </span>
         </div>
         <div className="mt-8 pb-10  flex  items-center justify-center">

@@ -1,10 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ApplyCourseAction } from "./action";
+import {
+  AppliedStudentsAction,
+  ApplyCourseAction,
+  ApprovedStudentsAction,
+} from "./action";
 
 const initialState = {
   applicationLoading: false,
   applicationMessage: "",
   applicationError: "",
+  applied: [],
+  approved: [],
 };
 const applyReducer = createSlice({
   name: "Apply",
@@ -22,6 +28,17 @@ const applyReducer = createSlice({
       .addCase(ApplyCourseAction.rejected, (state, action) => {
         state.applicationLoading = false;
         state.applicationError = action.payload;
+      })
+      .addCase(AppliedStudentsAction.pending, (state, action) => {
+        state.applicationLoading = true;
+      })
+      .addCase(AppliedStudentsAction.fulfilled, (state, action) => {
+        state.applicationLoading = false;
+        state.applied = action.payload;
+      })
+      .addCase(AppliedStudentsAction.rejected, (state, action) => {
+        state.applicationLoading = false;
+        state.applicationError = action.payload.message;
       });
   },
 });

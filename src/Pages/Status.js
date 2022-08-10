@@ -97,7 +97,7 @@ const Status = () => {
       },
     };
     const username = profile.email;
-    // dispatch(ApplyCourseAction({ formData, axiosPrivate }));
+    dispatch(ApplyCourseAction({ formData, axiosPrivate }));
     dispatch(AppliedState({ axiosPrivate, username }));
   };
   useEffect(() => {

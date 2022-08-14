@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import GlassHover from "../components/Admin/glassHover";
 
 const Dashboard = () => {
-  const [hover, setHover] = useState(true);
+  const [hover, setHover] = useState(false);
   return (
     <div>
       {hover ? (

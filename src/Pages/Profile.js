@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { UpdateProfile } from "../features/profile/actions";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { regions } from "../components/regions";
 
 const Profile = () => {
   const [formData, setFormData] = useState({
@@ -15,14 +16,14 @@ const Profile = () => {
   });
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    async function getRegions() {
-      const { data } = await axios.get("http://127.0.0.1:5000");
+  // useEffect(() => {
+  //   async function getRegions() {
+  //     const { data } = await axios.get("http://127.0.0.1:5000");
 
-      setData(data.regions);
-    }
-    getRegions();
-  }, []);
+  //     setData(data.regions);
+  //   }
+  //   getRegions();
+  // }, []);
 
   const [has_olevo, setHas_olevo] = useState(false);
 
@@ -107,7 +108,7 @@ const Profile = () => {
                     className="h-10 w-72 p-2 border border-blue-700 outline-none"
                   >
                     <option>Select your Region</option>
-                    {data.map((item, index) => (
+                    {regions.map((item, index) => (
                       <option key={index} value={item}>
                         {item}
                       </option>

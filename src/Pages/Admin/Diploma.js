@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Card from "../../components/Admin/Card";
 import Navbar from "../../components/Admin/Navbar";
+import {
+  FetchCourseCertificate,
+  FetchCoursesDiploma,
+} from "../../features/courses/actions";
 
 const DiplomaAdmin = () => {
+  const dispatch = useDispatch();
+  const { diplomaLoading, courseDiploma } = useSelector(
+    (state) => state.Diploma
+  );
+
+  useEffect(() => {
+    dispatch(FetchCoursesDiploma());
+  }, [dispatch]);
   return (
     <div className="w-full h-screen flex-1 bg-blue-100 overflow-y-auto ">
       <Navbar />
@@ -29,15 +42,12 @@ const DiplomaAdmin = () => {
             <h1 className="font-semibold text-gray-700">Courses</h1>
           </span>
           <div className="my-4 w-11/12 flex items-center justify-center mt-4">
-            <div class="py-3">
-              <div class="container m-auto  text-gray-500 md:px-12 xl:px-0">
-                <div class="mx-auto grid gap-6 md:w-3/4 lg:w-full lg:grid-cols-4">
-                  <Card />
-                  <Card />
-                  <Card />
-                  <Card />
-                  <Card />
-                  <Card />
+            <div className="py-3">
+              <div className="container m-auto  text-gray-500 md:px-12 xl:px-0">
+                <div className="mx-auto grid gap-6 md:w-3/4 lg:w-full lg:grid-cols-4">
+                  {courseDiploma.map((item) => (
+                    <Card key={item.id} course={item} />
+                  ))}
                 </div>
               </div>
             </div>

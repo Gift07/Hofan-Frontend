@@ -33,7 +33,7 @@ const authReducer = createSlice({
       })
       .addCase(SignInAction.rejected, (state, action) => {
         state.authLoading = false;
-        state.authError = action.payload.error;
+        state.authError = action.payload.message;
       })
       .addCase(LoadUser.pending, (state, action) => {
         state.authLoading = true;
@@ -54,7 +54,7 @@ const authReducer = createSlice({
       })
       .addCase(LoadUser.rejected, (state, action) => {
         state.authLoading = false;
-        state.authError = action.payload.error;
+        state.authError = action.payload.message;
       })
       .addCase(SignUpAction.pending, (state, action) => {
         state.authLoading = true;
@@ -67,7 +67,7 @@ const authReducer = createSlice({
       })
       .addCase(SignUpAction.rejected, (state, action) => {
         state.authLoading = false;
-        state.authError = action.payload;
+        state.authError = action.payload.message;
       });
   },
 });

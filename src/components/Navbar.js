@@ -46,7 +46,7 @@ const Navbar = () => {
         </div>
         {admin ? (
           <div>
-            <Link to="/admin/dashboardss">
+            <Link to="/admin/dashboard">
               <div className="h-full flex items-center gap-x-3">
                 <img
                   src={User}
